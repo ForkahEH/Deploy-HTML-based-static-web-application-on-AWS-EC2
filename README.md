@@ -3,6 +3,8 @@
 
 This project was adapted from: https://devopsrealtime.com/deploy-html-based-static-web-application-on-aws-ec2/
 
+![image](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/36532dcc-7a18-44fb-b96c-f4af40d17f4c)
+
 # Pre-Deployment
 
 # Create the Golden AMI with application dependencies

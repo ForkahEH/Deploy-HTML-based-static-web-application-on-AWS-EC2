@@ -1,3 +1,47 @@
+# Application Setup
+
+# Step 1: Create File System on xvdb volume and mount it on /var/www/html directory
+1. Run the following command to view your available disk devices to help you determine the correct device name to use:  lsblk
+
+2. Run the following command to get information about the EBS volume: sudo file -s /dev/xvdf
+![Screenshot 2023-10-06 015319](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/ff301dfc-e2bd-469d-9796-e56ef62d5dd3)
+
+3. Run the following command to create a file system on the volume: sudo mkfs -t xfs /dev/xvdf
+
+4. Run the following command to mount the EBS Volume: sudo mount /dev/xvdf /var/www/html
+
+5. Verify that the EBS volume is mounted properly using the following command: df -h
+![Screenshot 2023-10-06 015648](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/f74015d2-5d7e-4891-8684-85a74b6a844d)
+
+# Step 2: Use Git commands and clone the source code from Bit Bucket repository provided in the pre-requisites
+1. Git clone the source code: git clone https://bitbucket.org/dptrealtime/html-web-app.git
+![Screenshot 2023-10-06 020015](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/c661aac4-a8aa-4ad4-b502-32476b6213e1)
+
+# Step 3: Deploy the source code into web server document root folder – /var/www/html
+1. Change directory into the cloned directory
+![Screenshot 2023-10-06 020213](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/64adeb75-e080-4f5e-b02f-f507e965a8d1)
+
+2. Copy the required files and restart the service
+sudo cp -r css/ images/ index.html js error.htm ok.htm header.html /var/www/html
+sudo systemctl restart apache2
+![Screenshot 2023-10-06 020228](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/505a5464-7a2e-4c82-a256-77bf2c0f492b)
+
+4. Enter the public IP of the EC2 instance in the browser to verify deployment
+   ![Screenshot 2023-10-06 013247](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/bef135e5-fda2-41be-8f60-eabb36c6fad9)
+
+# Create Route53 hosted zone with your domain name and configure A record pointing to the EC2 EIP
+
+1. In AWS Management Console, navigate to Route 53.
+
+2. In the Route 53 console, click on "Register a Domain".
+![Screenshot 2023-10-06 013315](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/b9a1f52f-1b9a-4521-9952-a3fb0947bb99)
+
+3. Under Register domains, enter a name and check its availability.
+
+4. Select the domain name you want to register and click "Proceed to register".
+![Screenshot 2023-10-06 014252](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/65f4272b-3e42-4ed8-999f-ff40a16a693d)
+
+5.  Fill in your contact infomation, click "Next" and submit.
 # Deploy-HTML-based-static-web-application-on-AWS-EC2
 
 # Create HTML server

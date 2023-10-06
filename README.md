@@ -1,6 +1,8 @@
-# Application Setup
+
+# Deploy-HTML-based-static-web-application-on-AWS-EC2# Application Setup
 
 # Step 1: Create File System on xvdb volume and mount it on /var/www/html directory
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html
 1. Run the following command to view your available disk devices to help you determine the correct device name to use:  lsblk
 
 2. Run the following command to get information about the EBS volume: sudo file -s /dev/xvdf
@@ -27,7 +29,8 @@ sudo systemctl restart apache2
 ![Screenshot 2023-10-06 020228](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/505a5464-7a2e-4c82-a256-77bf2c0f492b)
 
 4. Enter the public IP of the EC2 instance in the browser to verify deployment
-   ![Screenshot 2023-10-06 013247](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/bef135e5-fda2-41be-8f60-eabb36c6fad9)
+  ![Screenshot 2023-10-06 022357](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/296a6ce9-4a6e-42a9-8484-bbe0e33d7d5b)
+
 
 # Create Route53 hosted zone with your domain name and configure A record pointing to the EC2 EIP
 
@@ -42,16 +45,49 @@ sudo systemctl restart apache2
 ![Screenshot 2023-10-06 014252](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/65f4272b-3e42-4ed8-999f-ff40a16a693d)
 
 5.  Fill in your contact infomation, click "Next" and submit.
-# Deploy-HTML-based-static-web-application-on-AWS-EC2
+
+6.  Refresh till the registration is successful.
+   ![Screenshot 2023-10-06 020834](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/32998a2e-57e5-4474-b288-21e36d21b03c)
+
+7. Click Hosted zone and select your domain name.
+![Screenshot 2023-10-06 021016](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/4d7eb3a3-7691-451b-afb1-7b85ce2025d7)
+
+8. Click Create record. In the Quick create record page, select Record type A and click "Create Records".
+![Screenshot 2023-10-06 021543](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/59ce272d-0876-4ae4-b624-c6d90354cb91)
+
 
 # Create HTML server
 
 
 # Configure Cloudwatch agent to monitor Memory utilization of EC2 instance
-1. Create IAM Role
-2. Install CloudWatch Agent
-3. Create the CloudWatch agent configuration file with the wizard
+# Step 1: Create IAM Role
 
+# Step 2: Install CloudWatch Agent
+1. First run: aws configure
+![Screenshot 2023-10-06 023029](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/7036b3e9-5279-4f2d-9bcc-285c475d3039)
+
+2. Download the CloudWatch agent: wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
+![Screenshot 2023-10-06 023346](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/a3a5d6b5-86eb-4742-827b-ed52a21a473c)
+
+3. Change to the directory containing the package and run the following:
+   sudo dpkg -i -E ./amazon-cloudwatch-agent.deb
+   sudo apt-get install -f
+![Screenshot 2023-10-06 023731](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/3c955836-faf2-4a43-9fe0-07b2ac48dc81)
+
+4.  Start the CloudWatch Agent: sudo systemctl start amazon-cloudwatch-agent
+   
+# Step 3: Create the CloudWatch agent configuration file with the wizard
+
+1.  Start the CloudWatch Agent Configuration Wizard: sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-config-wizard
+ ![Screenshot 2023-10-06 024444](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/67ca25c2-6478-4d24-bfa1-a917a00e48d7)
+
+2. Follow the prompts to create the CloudWatch agent configuration file with the wizard
+![Screenshot 2023-10-06 024715](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/015fa7e9-474c-4de4-8cc7-1987543b8991)
+
+3. Restart and enable Cloudwatch:
+   sudo systemctl start amazon-cloudwatch-agent
+   sudo systemctl enable amazon-cloudwatch-agent
+   
 # Create Cloudwatch Dashboard to monitor CPU & Memory metrics of the EC2 instance
 
 1. In AWS Management Console, navigate to CloudWatch.
@@ -206,5 +242,11 @@ aws s3 cp /var/log/apache2/error.log s3://htmlstaticbucket/logs/errorfile.log
 
 Evidence of cronjob automation
 ![Screenshot 2023-10-06 012156](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/56e1fd00-faf6-4ba7-97ed-b6e49356e8d4)
+
+# Validation
+
+Verify if you are able to access the web application from internet browser. 
+
+![Screenshot 2023-10-06 022208](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/abf8834f-c6f4-446d-b2a5-0ced06b4fc86)
 
 

@@ -1,8 +1,118 @@
 
 # Deploy-HTML-based-static-web-application-on-AWS-EC2# Application Setup
-# Infrastructure Setup
-# Step 7: Create Route53 hosted zone with your domain name and configure A record pointing to the EC2 EIP
+# Pre-Deployment
 
+# Create the Golden AMI with application dependencies
+# Step 1: Launch EC2 instance for Golden AMI
+
+1. In the AWS Console Home, search for and select "EC2" resource.
+
+2. In the EC2 Console, select "Launch Instances".
+
+3. In the "Launch Instance" page, enter the name of the webserver: HTML Server.
+
+   Instance type: t2.micro
+   
+   Key pair: CICD
+
+   Select Edit in Network Settings
+   
+   select create security group
+
+   Security group name: HTML SG
+
+   Rules: SSH, port 22 and HTTP, port 80
+
+   SSH source: My IP, Custm TCP source: Everywhere IPv4
+
+   NB: The source, "My IP" is selected for added security.
+   
+5. Click "Launch Instance"
+
+6. Click "View Instances"
+![Screenshot 2023-10-05 191914](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/f24e0c08-1108-44b3-acd7-15805b217fe8)
+
+7. Refresh until status check for the instance shows "2/2 checks passed".
+
+8. In this project, we'll connect to the instance using SSH.
+![Screenshot 2023-10-05 191940](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/736ce934-590b-4345-8789-9d24dd01fd4d)
+
+# Step 2: Install Application dependecies
+
+1. Install AWSCLI using the installation instructions from the AWS Documentation: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+![Screenshot 2023-10-05 192256](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/334183c2-dae7-48ee-a986-6f0dbd60dd6f)
+
+2. Install and start Apache Web Server using the following commands:
+   sudo apt update
+   sudo apt install apache2
+   sudo systemctl start apache2
+   sudo systemctl status apache2
+   ![Screenshot 2023-10-05 192720](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/881fffe0-dea4-448a-b22d-63425ceb8dcf)
+
+# Step 3: Configure Apache to start automatically after the instance reboot 
+1. Enable Apache to start on reboot: sudo systemctl enable apache2
+![Screenshot 2023-10-05 192525](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/4dc65a59-a86f-4146-88bf-5f1210b968e8)
+
+# Step 4: Verify Installation of Git
+Check if git is already installed: git --version
+![Screenshot 2023-10-05 192602](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/9e28c2ec-fa16-4099-879b-d4c9636dc990)
+
+# Step 5: Create Golden AMI
+1. Stop and select the HTML server, Click on the actions tab, select "Images and template" from the drop down menu, select "create image" from the drop down menu.
+![Screenshot 2023-10-06 093120](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/323a2947-ff84-492a-b38f-5ee6625ab059)
+
+2. In the Create image page, enter the name of the image and enable reboot and click "Create image".
+
+3. In the EC2 Console, select AMIs under Images
+   ![Screenshot 2023-10-05 192955](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/37049454-fe28-46be-a5e0-29d3c19df50e)
+
+4. Refresh until the AMI is available
+   ![Screenshot 2023-10-06 093909](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/1470877a-349b-4d29-9da1-3ce8bd546b46)
+
+# Deployment
+# Infrastructure Setup
+
+# Step 1: Create Security Group allowing port 22 from custom IP source and port 80 from public
+  The HTML SG created earlier is used
+  ![Screenshot 2023-10-06 094302](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/8b473761-d71e-4afd-acb7-689ca835ec71)
+
+# Step 2: Create Key-Pair and download the private key
+  The CICD key pair is used
+
+# Step 3: Create t2.micro type EC2 instance using Golden AMI
+1. In the AWS Console Home, search for and select "EC2" resource.
+
+2. In the EC2 Console, select "Launch Instances".
+
+3. In the "Launch Instance" page, enter the name of the webserver: Static Server.
+
+   Application and OS Images (Amazon Machine Image): Select My AMIs and select the HTML AMI.
+  ![Screenshot 2023-10-06 100036](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/8488dbde-7fcb-4c44-b65c-4081d4f022ed)
+
+   Instance type: t2.micro
+   
+   Key pair: CICD
+
+   In the Network settings section, select the existing HTML SG security group.
+
+4.  Click "Launch Instance"
+
+5.   Click "View Instances"
+![Screenshot 2023-10-06 095831](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/06b17891-0438-4bd0-9016-879d7fb47fdc)
+
+# Step 4: Create Elastic IP and associate the IP to EC2 instance
+1.  In the EC2 Console, select "Elastic IPs".
+
+2.  Click "Allocate Elastic IP"
+![Screenshot 2023-10-06 100813](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/b5d18f33-b5d5-480c-a36e-72508e7f85a5)
+
+3.  Under Allocate Elastic IP address, leave the defaults and click Allocate.
+![Screenshot 2023-10-06 101437](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/d9134897-2679-481f-9591-e37e53553ffe)
+
+4.  
+
+    
+# Step 7: Create Route53 hosted zone with your domain name and configure A record pointing to the EC2 EIP
 1. In AWS Management Console, navigate to Route 53.
 
 2. In the Route 53 console, click on "Register a Domain".

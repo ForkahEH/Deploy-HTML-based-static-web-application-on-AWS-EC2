@@ -159,3 +159,8 @@ aws s3 cp /var/log/apache2/error.log s3://htmlstaticbucket/logs/errorfile.log
 6. Click "Create".
 ![Screenshot 2023-10-06 012003](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/25131eb2-650a-4e09-9010-48bb765549cd)
 
+
+Evidence of cronjob automation
+![Screenshot 2023-10-06 012156](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/56e1fd00-faf6-4ba7-97ed-b6e49356e8d4)
+
+

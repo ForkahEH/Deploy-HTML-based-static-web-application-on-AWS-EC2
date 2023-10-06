@@ -1,5 +1,30 @@
 
 # Deploy-HTML-based-static-web-application-on-AWS-EC2# Application Setup
+# Infrastructure Setup
+# Step 7: Create Route53 hosted zone with your domain name and configure A record pointing to the EC2 EIP
+
+1. In AWS Management Console, navigate to Route 53.
+
+2. In the Route 53 console, click on "Register a Domain".
+![Screenshot 2023-10-06 013315](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/b9a1f52f-1b9a-4521-9952-a3fb0947bb99)
+
+3. Under Register domains, enter a name and check its availability.
+
+4. Select the domain name you want to register and click "Proceed to register".
+![Screenshot 2023-10-06 014252](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/65f4272b-3e42-4ed8-999f-ff40a16a693d)
+
+5.  Fill in your contact infomation, click "Next" and submit.
+
+6.  Refresh till the registration is successful.
+   ![Screenshot 2023-10-06 020834](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/32998a2e-57e5-4474-b288-21e36d21b03c)
+
+7. Click Hosted zone and select your domain name.
+![Screenshot 2023-10-06 021016](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/4d7eb3a3-7691-451b-afb1-7b85ce2025d7)
+
+8. Click Create record. In the Quick create record page, select Record type A and click "Create Records".
+![Screenshot 2023-10-06 021543](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/59ce272d-0876-4ae4-b624-c6d90354cb91)
+
+# Application Setup
 
 # Step 1: Create File System on xvdb volume and mount it on /var/www/html directory
 https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html
@@ -31,33 +56,7 @@ sudo systemctl restart apache2
 4. Enter the public IP of the EC2 instance in the browser to verify deployment
   ![Screenshot 2023-10-06 022357](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/296a6ce9-4a6e-42a9-8484-bbe0e33d7d5b)
 
-
-# Create Route53 hosted zone with your domain name and configure A record pointing to the EC2 EIP
-
-1. In AWS Management Console, navigate to Route 53.
-
-2. In the Route 53 console, click on "Register a Domain".
-![Screenshot 2023-10-06 013315](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/b9a1f52f-1b9a-4521-9952-a3fb0947bb99)
-
-3. Under Register domains, enter a name and check its availability.
-
-4. Select the domain name you want to register and click "Proceed to register".
-![Screenshot 2023-10-06 014252](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/65f4272b-3e42-4ed8-999f-ff40a16a693d)
-
-5.  Fill in your contact infomation, click "Next" and submit.
-
-6.  Refresh till the registration is successful.
-   ![Screenshot 2023-10-06 020834](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/32998a2e-57e5-4474-b288-21e36d21b03c)
-
-7. Click Hosted zone and select your domain name.
-![Screenshot 2023-10-06 021016](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/4d7eb3a3-7691-451b-afb1-7b85ce2025d7)
-
-8. Click Create record. In the Quick create record page, select Record type A and click "Create Records".
-![Screenshot 2023-10-06 021543](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/59ce272d-0876-4ae4-b624-c6d90354cb91)
-
-
-# Create HTML server
-
+# Post-Deployment
 
 # Configure Cloudwatch agent to monitor Memory utilization of EC2 instance
 # Step 1: Create IAM Role

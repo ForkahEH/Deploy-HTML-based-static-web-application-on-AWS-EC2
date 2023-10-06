@@ -122,3 +122,40 @@
 ![Screenshot 2023-10-06 001812](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/7bae8c32-7864-495d-8365-917738bf24d2)
 
 4. Restart the Apache web server to apply the changes: sudo service apache2 restart
+
+5. Run the following commands:
+aws s3 cp /var/log/apache2/access.log s3://htmlstaticbucket/logs/logfile.log
+aws s3 cp /var/log/apache2/error.log s3://htmlstaticbucket/logs/errorfile.log
+![Screenshot 2023-10-06 004112](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/2833f3c5-fa72-47f0-bae8-c1cd806b60c8)
+
+6. In AWS Management Console, navigate to S3.
+
+7. In the S3 console, select Buckets > htmlstaticbucket > logs. The files would be displayed.
+![Screenshot 2023-10-06 004240](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/4bb62d5f-7991-4633-b184-a4e39032cce8)
+
+8. To automate log uploading, a cron job is used.
+   Run this command: crontab -e
+   Enter the following lines in the crontab file:
+   0 * * * * aws s3 cp /var/log/apache2/access.log s3://htmlstaticbucket/logs/logfile-$(date +\%Y\%m\%d\%H).log
+   0 * * * * aws s3 cp /var/log/apache2/error.log s3://htmlstaticbucket/logs/errorfile-$(date +\%Y\%m\%d\%H).log
+   ![Screenshot 2023-10-06 005205](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/512332d7-8d46-4ec6-89ce-80784f80b974)
+
+# Configure S3 life cycle rules to transit previous version objects to Glacier after 30 days and delete the objects after 90 days of object creation date
+
+1. In the htmlstaticbucket page, click on "Management" and click "Create lifecycle rule".
+![Screenshot 2023-10-06 010026](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/549d9753-5b89-4a6e-9937-b9c00a724988)
+
+2. Enter a  name for your rule, select "Apply to all objects in the bucket".
+
+3. Under Lifecycle rule actions, select "Move noncurrent versions of objects between storage classes" and "Permanently delete noncurrent versions of objects".
+![Screenshot 2023-10-06 011512](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/6c545062-7df7-4dba-81c9-9ea73e321a80)
+
+4. Under Transition current versions of objects between storage classes, select "Glacier Flexible Retrieval" and enter 30 days.
+![Screenshot 2023-10-06 011631](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/44149089-399c-4117-aeb4-5a237de0d805)
+
+5. Under Permanently delete noncurrent versions of objects, select 90 days.
+![Screenshot 2023-10-06 011702](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/2758a78e-89b9-4afb-9fde-316904b15591)
+
+6. Click "Create".
+![Screenshot 2023-10-06 012003](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/25131eb2-650a-4e09-9010-48bb765549cd)
+

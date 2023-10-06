@@ -418,7 +418,7 @@ https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatc
 
    Threshold type: Static
 
-    Whenever mem_used_percent is... : Greater than - 60
+   Whenever mem_used_percent is... : Greater than - 60
 
 ![Screenshot 2023-10-05 235753](https://github.com/ForkahEH/Deploy-HTML-based-static-web-application-on-AWS-EC2/assets/127892742/e0333f19-f227-49df-ae5f-d7b204df2a07)
 
